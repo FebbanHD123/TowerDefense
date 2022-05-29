@@ -17,7 +17,8 @@ func (s *MainMenuScreen) init() {
 	s.startTime = time.Now()
 	s.buttons = []ButtonWidget{
 		CreateButtonWidget("Map-Editor", width/2-50, height/2-10, 100, 40, func() {
-			levelEditorScreen := NewLevelEditor(CreateImageName("Background.bmp"))
+			levelEditorScreen := CreateLevelEditor(Levels[0], s)
+			//levelEditorScreen := CreateNewLevelEditor(s)
 			SetScreen(&levelEditorScreen)
 		}),
 	}

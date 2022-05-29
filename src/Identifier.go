@@ -1,20 +1,26 @@
 package main
 
+import (
+	"strings"
+)
+
 //Ziel: Einfache benutzung von assets/resources.
 
 const assetsPath = "assets/"
 
 type Identifier struct {
-	path string
+	Path string
 }
 
-func NewIdentifier(name string) Identifier {
-	path := assetsPath + name
+func NewIdentifier(path string) Identifier {
+	if !strings.HasPrefix(path, assetsPath) {
+		path = assetsPath + path
+	}
 	return Identifier{
-		path: path,
+		Path: path,
 	}
 }
 
 func (i *Identifier) getPath() string {
-	return i.path
+	return i.Path
 }

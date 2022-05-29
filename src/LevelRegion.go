@@ -8,6 +8,7 @@ const (
 	RTYPE_PATH    int = 0
 	RTYPE_DEFENSE     = 1
 	RTYPE_GOAL        = 2
+	RTYPE_SPAWN       = 3
 )
 
 type LevelRegion struct {

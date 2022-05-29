@@ -12,6 +12,7 @@ type TextBox struct {
 	showCursor          bool
 	lastCursorUpdate    time.Time
 	selected            bool
+	animationAlpha      int
 }
 
 func CreateTextBox(x, y, width, height uint16) TextBox {
@@ -35,7 +36,8 @@ func (t *TextBox) Update() {
 }
 
 func (t *TextBox) Render() {
-	gfx.Stiftfarbe(70, 70, 70)
+	t.updateAnimation(currentDeltaTime)
+	gfx.Stiftfarbe(70+uint8(t.animationAlpha), 70+uint8(t.animationAlpha), 70+uint8(t.animationAlpha))
 	gfx.Vollrechteck(t.x-2, t.y-2, t.width+2*2, t.height+2*2)
 	gfx.Stiftfarbe(10, 10, 10)
 	gfx.Vollrechteck(t.x, t.y, t.width, t.height)
@@ -78,8 +80,10 @@ func (t *TextBox) mousePress(taste uint8, mouseX, mouseY uint16) {
 	t.selected = rect.ContainsPosition(mouseX, mouseY)
 	t.showCursor = true
 	t.lastCursorUpdate = time.Now()
+	t.cursor = len(t.text)
 }
 
+//Achtung: Englische Tastatur
 func (t *TextBox) keyPressed(taste uint16, gedrueckt bool, tiefe uint16) {
 	if !t.selected {
 		return
@@ -99,8 +103,8 @@ func (t *TextBox) keyPressed(taste uint16, gedrueckt bool, tiefe uint16) {
 				if t.cursor > 0 {
 					t.cursor--
 				}
-				return
 			}
+			return
 		}
 		if taste == KEY_ARROR_RIGHT {
 			if t.cursor != len(t.text) {
@@ -115,7 +119,76 @@ func (t *TextBox) keyPressed(taste uint16, gedrueckt bool, tiefe uint16) {
 			return
 		}
 
-		t.text += string(taste)
+		if IsInvalidTextCharacter(taste) {
+			return
+		}
+		if tiefe == 1 { // wenn shift gedrückt
+			if taste >= 97 { //buchstabe
+				taste -= 97 - 65
+			} else if taste >= 48 { //zahl
+				taste -= 48 - 32
+			}
+
+		}
+
+		var text string
+
+		if t.cursor == 0 {
+			text += string(taste)
+		}
+		for i := 0; i < len(t.text); i++ {
+			text += string(t.text[i])
+			if i+1 == t.cursor {
+				text += string(taste)
+			}
+		}
+		t.text = text
 		t.cursor++
 	}
+}
+
+func IsInvalidTextCharacter(c uint16) bool {
+	invalidChars := []uint16{
+		304, 301,
+	}
+	for _, char := range invalidChars {
+		if char == c {
+			return true
+		}
+	}
+	return false
+}
+
+func (t *TextBox) isEmpty() bool {
+	return len(t.text) == 0
+}
+
+func (t *TextBox) SetText(text string) {
+	//Vor.: text wird übergeben
+	//Eff.: Text der textbox wird auf den übergeben string gesetzt
+	t.text = text
+}
+
+func (t *TextBox) updateAnimation(deltaTime int64) {
+	//Vor.: -
+	//Eff.: Erhöht oder Sinkt die alpha variable des buttons,
+	//welche den einfluss hat, dass der Farbton des Buttons heller (bei hohem alpha)
+	//oder dunkler (bei niedrigem alpha) ist.
+	var maxAnimation int = 80
+	if t.isMouseHover(MouseX, MouseY) || t.selected {
+		t.animationAlpha += 4 * int(deltaTime)
+		if t.animationAlpha > maxAnimation {
+			t.animationAlpha = maxAnimation
+		}
+	} else if t.animationAlpha > 0 {
+		t.animationAlpha -= 4 * int(deltaTime)
+		if t.animationAlpha < 0 {
+			t.animationAlpha = 0
+		}
+	}
+}
+
+func (t *TextBox) isMouseHover(mouseX, mouseY uint16) bool {
+	rect := CreateRect(t.x, t.y, t.width, t.height)
+	return rect.ContainsPosition(mouseX, mouseY)
 }

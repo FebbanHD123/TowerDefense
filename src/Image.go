@@ -1,14 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"gfx"
-	"log"
 	"os"
 	"strings"
 )
 
 type Image struct {
-	id Identifier
+	Id Identifier
 }
 
 func CreateImage(id Identifier) Image {
@@ -18,16 +18,16 @@ func CreateImage(id Identifier) Image {
 	fileInfo, err := os.Stat(id.getPath())
 
 	if err != nil {
-		log.Fatal("Es kann kein Image Object erstellt werden, da der Pfad auf keine Image Dateo zeigt")
+		fmt.Println("Es kann kein Image Object erstellt werden, da der Pfad auf keine Image Dateo zeigt")
 		return Image{}
 	}
 	if !strings.HasSuffix(fileInfo.Name(), ".bmp") {
-		log.Fatal("Die hinterlegte Datei ist kein .bmp Image")
+		fmt.Println("Die hinterlegte Datei ist kein .bmp Image")
 		return Image{}
 	}
 
 	return Image{
-		id: id,
+		Id: id,
 	}
 }
 
@@ -36,5 +36,5 @@ func CreateImageName(name string) Image {
 }
 
 func (i *Image) Render(x, y uint16) {
-	gfx.LadeBild(x, y, i.id.path)
+	gfx.LadeBild(x, y, i.Id.Path)
 }

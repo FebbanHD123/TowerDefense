@@ -17,6 +17,7 @@ const (
 var currentFps = 0
 var lastFpsTime int64 = 0
 var fpsTimer = 0
+var currentDeltaTime int64
 
 var currentScreen Screen
 var lastIterationTime time.Time
@@ -36,7 +37,6 @@ func initWindow() {
 	//Setzte Font
 	InitFont()
 
-	//screen := NewLevelEditor(util.CreateImageName("Background.bmp"))
 	screen := MainMenuScreen{}
 	SetScreen(&screen)
 	lastIterationTime = time.Now()
@@ -54,6 +54,7 @@ func loop() {
 	updateLength := now.Sub(lastIterationTime)
 	lastIterationTime = now
 	delta := int64(float64(updateLength.Nanoseconds()) / float64(optimalTime))
+	currentDeltaTime = delta
 
 	//fps time hochzählen, um diesen Wert sp#ter abfragen zu können
 	lastFpsTime += updateLength.Nanoseconds()
@@ -130,6 +131,7 @@ func SetScreen(screen Screen) {
 }
 
 func MouseClickConsumer(taste uint8, status int8) {
+	//Info: Wird ausgeführt, wenn ein Mausklick eingeht
 	switch status {
 	case 1:
 		currentScreen.mousePress(taste, MouseX, MouseY)
@@ -139,5 +141,6 @@ func MouseClickConsumer(taste uint8, status int8) {
 }
 
 func TastaturConsumer(taste uint16, gedrueckt uint8, tiefe uint16) {
+	//Wird ausgeführt, wenn die Tastatur gedrückt wird
 	currentScreen.keyPressed(taste, gedrueckt == 1, tiefe)
 }
