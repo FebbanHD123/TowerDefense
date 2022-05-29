@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"gfx"
 	"strconv"
 	"time"
@@ -11,8 +10,8 @@ const (
 	targetFps   = 60
 	optimalTime = 1000000000 / targetFps
 	debugMode   = true
-	width       = 800
-	height      = 600
+	width       = 1280
+	height      = 720
 )
 
 var currentFps = 0
@@ -42,7 +41,7 @@ func initWindow() {
 	SetScreen(&screen)
 	lastIterationTime = time.Now()
 
-	StartInputListen(MouseClickConsumer)
+	StartInputListen(MouseClickConsumer, TastaturConsumer)
 
 }
 
@@ -67,7 +66,6 @@ func loop() {
 		lastFpsTime = 0
 		currentFps = fpsTimer
 		fpsTimer = 0
-		fmt.Println("fps:", currentFps)
 	}
 
 	//Update aus um dual buffering zu ermöglichen
@@ -138,4 +136,8 @@ func MouseClickConsumer(taste uint8, status int8) {
 	case -1:
 		currentScreen.mouseRelease(taste, MouseX, MouseY)
 	}
+}
+
+func TastaturConsumer(taste uint16, gedrueckt uint8, tiefe uint16) {
+	currentScreen.keyPressed(taste, gedrueckt == 1, tiefe)
 }

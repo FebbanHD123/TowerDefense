@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -10,7 +9,7 @@ type Makierung struct {
 	step           int
 }
 
-func NeueMakierung() Makierung {
+func CreateMakierung() Makierung {
 	return Makierung{
 		X1:   0,
 		Y1:   0,
@@ -48,8 +47,6 @@ func (m *Makierung) ToRect() Rect {
 	width = uint16(math.Abs(float64(int(m.X2) - int(m.X1))))
 	height = uint16(math.Abs(float64(int(m.Y2) - int(m.Y1))))
 
-	fmt.Println(width)
-
 	if m.X1 < m.X2 && m.Y1 < m.Y2 {
 		x = m.X1
 		y = m.Y1
@@ -72,4 +69,12 @@ func (m *Makierung) ToRect() Rect {
 		Height: height,
 	}
 
+}
+
+func (m *Makierung) Reset() {
+	m.step = -1
+	m.X1 = 0
+	m.Y1 = 0
+	m.X2 = 0
+	m.Y2 = 0
 }

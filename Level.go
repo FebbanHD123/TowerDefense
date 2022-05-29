@@ -1,12 +1,19 @@
 package main
 
+//Infos:
+//Background-Image-size: 800px x 720px
+
 type Level struct {
 	BackGroundImage Image
-	Regions         []LevelRegion
+	regions         []LevelRegion
 }
 
 func (l *Level) Render(x, y uint16) {
 	l.BackGroundImage.Render(x, y)
+}
+
+func (l *Level) AddRegion(region LevelRegion) {
+	l.regions = append(l.regions, region)
 }
 
 func LoadLevel(path string) Level {
@@ -14,4 +21,8 @@ func LoadLevel(path string) Level {
 	//wird als string parameter übergeben
 	//Eff.: Das level wird geladen und zurückgegeben
 	return Level{}
+}
+
+func (l *Level) GetRegions() []LevelRegion {
+	return l.regions
 }

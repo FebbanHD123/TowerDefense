@@ -15,8 +15,9 @@ var (
 	MouseX uint16
 )
 
-func StartInputListen(clickConsumer func(taste uint8, status int8)) {
+func StartInputListen(clickConsumer func(taste uint8, status int8), tastaturConsumer func(taste uint16, gedrueckt uint8, tiefe uint16)) {
 	go listenMouse(clickConsumer)
+	go listenKeyBoard(tastaturConsumer)
 }
 
 func listenMouse(clickConsumer func(taste uint8, status int8)) {
@@ -30,9 +31,10 @@ func listenMouse(clickConsumer func(taste uint8, status int8)) {
 	}
 }
 
-func listenKeyBoard() {
+func listenKeyBoard(tastaturConsumer func(taste uint16, gedrueckt uint8, tiefe uint16)) {
 	for {
-		gfx.TastaturLesen1()
+		taste, gedrueckt, tiefe := gfx.TastaturLesen1()
+		tastaturConsumer(taste, gedrueckt, tiefe)
 	}
 }
 

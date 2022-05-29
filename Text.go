@@ -13,21 +13,24 @@ import "fmt"
 
 const (
 	FontYVerschiebung = 5
-	FontHeight = 20 - FontYVerschiebung
+	FontHeight        = 20 - FontYVerschiebung
+	KEY_DELETE        = 8
+	KEY_ARROR_RIGHT   = 275
+	KEY_ARROR_LEFT    = 276
 )
 
 var fontIdentifier = NewIdentifier("fonts/Skranji-Regular.ttf")
 var font *truetype.Font
 
 func InitFont() {
-	
+
 	file, err := os.Open(fontIdentifier.getPath())
 	if err != nil {
 		panic(err)
 	}
-	
+
 	//erstelle byte array (größe 1 mb)
-	ttf := make([]byte, 1024 * 1024)
+	ttf := make([]byte, 1024*1024)
 	//Fülle das array mit den daten des files
 	size, err := file.Read(ttf)
 	if err != nil {
@@ -35,8 +38,8 @@ func InitFont() {
 	}
 	//entferne überschüssige array indices
 	ttf = ttf[:size]
-	
-	gfx.SetzeFont(fontIdentifier.getPath(), FontHeight + FontYVerschiebung)
+
+	gfx.SetzeFont(fontIdentifier.getPath(), FontHeight+FontYVerschiebung)
 	f, err := truetype.Parse(ttf)
 	font = f
 	if err != nil {
@@ -47,8 +50,8 @@ func InitFont() {
 
 func RenderText(text string, x, y uint16) {
 	//Vor.: text und die position werden übergeben
-	//Eff.: text wird an der poisiton gerendert 
-	gfx.SchreibeFont(x, y, text)
+	//Eff.: text wird an der poisiton gerendert
+	gfx.SchreibeFont(x, y-FontYVerschiebung, text)
 }
 
 func RenderCenteredText(text string, x, y uint16) {
@@ -56,7 +59,7 @@ func RenderCenteredText(text string, x, y uint16) {
 	//Eff.: text wird mittig gerendert. Also nicht wie bei RenderText
 	//an der x- und y-position sondern die x- und y-position ist in der mitte des textes
 	width := GetTextWidth(text)
-	RenderText(text, x - width / 2, y - FontYVerschiebung)
+	RenderText(text, x-width/2, y)
 }
 
 func GetTextWidth(text string) uint16 {
@@ -65,9 +68,8 @@ func GetTextWidth(text string) uint16 {
 	var width uint16
 	for i := 0; i < len(text); i++ {
 		char := rune(text[i])
-		charWidth := uint16(font.HMetric(FontHeight, font.Index(char)).AdvanceWidth)
+		charWidth := uint16(font.HMetric(FontHeight+FontYVerschiebung, font.Index(char)).AdvanceWidth)
 		width += charWidth
 	}
 	return width
 }
- 
