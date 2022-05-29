@@ -3,7 +3,6 @@ package main
 import "gfx"
 import "github.com/golang/freetype/truetype"
 import "os"
-import "fmt"
 
 //Ziel: Auslesen der ttf/font datei um die width von texten herrauszufinden
 //      und so auch text mittig rendern können, da diese FUnktion wichtig ist
@@ -45,7 +44,6 @@ func InitFont() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(font.HMetric(FontHeight, font.Index(rune("B"[0]))).AdvanceWidth)
 }
 
 func RenderText(text string, x, y uint16) {

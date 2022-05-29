@@ -12,7 +12,7 @@ import (
 type LevelEditorScreen struct {
 	level                                                                                      Level
 	makierung                                                                                  Makierung
-	nameTextBox, backgroundImageTextBox                                                        TextBox
+	nameTextBox, backgroundImageTextBox                                                        TextBoxWidget
 	createButton, cancelButton, setPathButton, setDefenseButton, setGoalButton, setSpawnButton ButtonWidget
 	previousScreen                                                                             Screen
 	showRegions                                                                                bool
@@ -131,6 +131,9 @@ func (s *LevelEditorScreen) render() {
 	s.backgroundImageTextBox.Render()
 	s.toggleShowRegionsButton.Render(MouseX, MouseY)
 
+	gfx.Stiftfarbe(150, 0, 0)
+	RenderCenteredText("No BackgroundImage selected!", width/2, height/2)
+	gfx.Stiftfarbe(255, 255, 255)
 	s.level.Render(240, 0)
 	if s.showRegions {
 		for i := range s.level.GetRegions() {

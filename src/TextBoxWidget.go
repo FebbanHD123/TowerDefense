@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type TextBox struct {
+type TextBoxWidget struct {
 	text                string
 	cursor              int
 	x, y, width, height uint16
@@ -15,8 +15,8 @@ type TextBox struct {
 	animationAlpha      int
 }
 
-func CreateTextBox(x, y, width, height uint16) TextBox {
-	return TextBox{
+func CreateTextBox(x, y, width, height uint16) TextBoxWidget {
+	return TextBoxWidget{
 		text:             "",
 		cursor:           0,
 		x:                x,
@@ -28,14 +28,14 @@ func CreateTextBox(x, y, width, height uint16) TextBox {
 	}
 }
 
-func (t *TextBox) Update() {
+func (t *TextBoxWidget) Update() {
 	if time.Now().Sub(t.lastCursorUpdate).Milliseconds() > 500 {
 		t.lastCursorUpdate = time.Now()
 		t.showCursor = !t.showCursor
 	}
 }
 
-func (t *TextBox) Render() {
+func (t *TextBoxWidget) Render() {
 	t.updateAnimation(currentDeltaTime)
 	gfx.Stiftfarbe(70+uint8(t.animationAlpha), 70+uint8(t.animationAlpha), 70+uint8(t.animationAlpha))
 	gfx.Vollrechteck(t.x-2, t.y-2, t.width+2*2, t.height+2*2)
@@ -72,7 +72,7 @@ func (t *TextBox) Render() {
 	RenderText(text, t.x+5, t.y+t.height/2-FontHeight/2)
 }
 
-func (t *TextBox) mousePress(taste uint8, mouseX, mouseY uint16) {
+func (t *TextBoxWidget) mousePress(taste uint8, mouseX, mouseY uint16) {
 	rect := CreateRect(t.x, t.y, t.width, t.height)
 	if taste != 1 {
 		return
@@ -84,7 +84,7 @@ func (t *TextBox) mousePress(taste uint8, mouseX, mouseY uint16) {
 }
 
 //Achtung: Englische Tastatur
-func (t *TextBox) keyPressed(taste uint16, gedrueckt bool, tiefe uint16) {
+func (t *TextBoxWidget) keyPressed(taste uint16, gedrueckt bool, tiefe uint16) {
 	if !t.selected {
 		return
 	}
@@ -159,17 +159,17 @@ func IsInvalidTextCharacter(c uint16) bool {
 	return false
 }
 
-func (t *TextBox) isEmpty() bool {
+func (t *TextBoxWidget) isEmpty() bool {
 	return len(t.text) == 0
 }
 
-func (t *TextBox) SetText(text string) {
+func (t *TextBoxWidget) SetText(text string) {
 	//Vor.: text wird übergeben
 	//Eff.: Text der textbox wird auf den übergeben string gesetzt
 	t.text = text
 }
 
-func (t *TextBox) updateAnimation(deltaTime int64) {
+func (t *TextBoxWidget) updateAnimation(deltaTime int64) {
 	//Vor.: -
 	//Eff.: Erhöht oder Sinkt die alpha variable des buttons,
 	//welche den einfluss hat, dass der Farbton des Buttons heller (bei hohem alpha)
@@ -188,7 +188,7 @@ func (t *TextBox) updateAnimation(deltaTime int64) {
 	}
 }
 
-func (t *TextBox) isMouseHover(mouseX, mouseY uint16) bool {
+func (t *TextBoxWidget) isMouseHover(mouseX, mouseY uint16) bool {
 	rect := CreateRect(t.x, t.y, t.width, t.height)
 	return rect.ContainsPosition(mouseX, mouseY)
 }

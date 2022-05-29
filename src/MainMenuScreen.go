@@ -10,7 +10,7 @@ type MainMenuScreen struct {
 	x, y      uint16
 	startTime time.Time
 	buttons   []ButtonWidget
-	textbox   TextBox
+	textbox   TextBoxWidget
 }
 
 func (s *MainMenuScreen) init() {
