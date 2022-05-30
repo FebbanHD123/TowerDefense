@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
+	"time"
 )
 
 var GameFilePath = ""
@@ -26,9 +28,10 @@ func main() {
 		}
 	}
 	fmt.Println("Game-Dir:", GameFilePath)
+	rand.Seed(time.Now().UnixMicro())
 
 	LoadAllLevels()
-
+	InitEnemyTextures()
 	initWindow()
 	for {
 		loop()

@@ -141,3 +141,17 @@ func (l *Level) HasAllRequiredRegions() bool {
 	}
 	return path && goal && defense && spawn
 }
+
+func (l *Level) GetRegionOfType(regionType int) LevelRegion {
+	for _, region := range l.Regions {
+		if region.Type == regionType {
+			return region
+		}
+	}
+	panic("Region with this type does not exists!")
+}
+
+func (l *Level) GetRandomSpawnLocation() Location {
+	spawnRegion := l.GetRegionOfType(RTYPE_SPAWN)
+	return spawnRegion.Region.GetRandomLocation()
+}

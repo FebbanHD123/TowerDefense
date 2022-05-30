@@ -16,7 +16,11 @@ type MainMenuScreen struct {
 func (s *MainMenuScreen) init() {
 	s.startTime = time.Now()
 	s.buttons = []ButtonWidget{
-		CreateButtonWidget("Map-Editor", width/2-50, height/2-10, 100, 40, func() {
+		CreateButtonWidget("Start Game", width/2-50, height/2-100, 200, 50, func() {
+			ingameScreen := CreateIngameScreen(Levels[0])
+			SetScreen(&ingameScreen)
+		}),
+		CreateButtonWidget("Map-Editor", width/2-50, height/2-20, 200, 50, func() {
 			levelEditorScreen := CreateLevelEditor(Levels[0], s)
 			//levelEditorScreen := CreateNewLevelEditor(s)
 			SetScreen(&levelEditorScreen)
