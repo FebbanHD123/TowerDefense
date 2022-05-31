@@ -21,7 +21,7 @@ func (s *MainMenuScreen) init() {
 			SetScreen(&ingameScreen)
 		}),
 		CreateButtonWidget("Map-Editor", width/2-50, height/2-20, 200, 50, func() {
-			levelEditorScreen := CreateLevelEditor(Levels[0], s)
+			levelEditorScreen := CreateNewLevelEditor(s)
 			//levelEditorScreen := CreateNewLevelEditor(s)
 			SetScreen(&levelEditorScreen)
 		}),

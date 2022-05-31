@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -20,10 +19,17 @@ func CreateWorld(level Level) World {
 }
 
 func (w *World) Update(deltaTime int64) {
-	if w.enemySpawnTimer.HasReached() {
-		w.enemySpawnTimer.Reset()
+	if len(w.enemies) == 0 {
 		spawnLocation := w.level.GetRandomSpawnLocation()
-		w.enemies = append(w.enemies, CreateEnemy(spawnLocation))
+		w.enemies = append(w.enemies, CreateEnemy(spawnLocation, *w))
+	}
+	//if w.enemySpawnTimer.HasReached() {
+	//	w.enemySpawnTimer.Reset()
+	//	spawnLocation := w.level.GetRandomSpawnLocation()
+	//	w.enemies = append(w.enemies, CreateEnemy(spawnLocation, *w))
+	//}
+	for _, enemy := range w.enemies {
+		enemy.Update(deltaTime)
 	}
 
 }
@@ -35,7 +41,6 @@ func (w *World) Render(x, y uint16) {
 
 func (w *World) renderEntities() {
 	for _, enemy := range w.enemies {
-		fmt.Println("render enemy at", enemy.location)
 		enemy.Render()
 	}
 }

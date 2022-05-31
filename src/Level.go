@@ -126,7 +126,7 @@ func (l *Level) GetRegions() []LevelRegion {
 func (l *Level) HasAllRequiredRegions() bool {
 	//Vor.: -
 	//Eff.: Gibt zurück, ob das level alle regionen hat, die es braucht
-	var path, goal, defense, spawn bool
+	var path, goal, defense, spawn, waypoint bool
 	for _, region := range l.GetRegions() {
 		switch region.Type {
 		case RTYPE_PATH:
@@ -137,9 +137,11 @@ func (l *Level) HasAllRequiredRegions() bool {
 			defense = true
 		case RTYPE_SPAWN:
 			spawn = true
+		case RTYPE_WAYPOINT:
+			waypoint = true
 		}
 	}
-	return path && goal && defense && spawn
+	return path && goal && defense && spawn && waypoint
 }
 
 func (l *Level) GetRegionOfType(regionType int) LevelRegion {
@@ -151,7 +153,31 @@ func (l *Level) GetRegionOfType(regionType int) LevelRegion {
 	panic("Region with this type does not exists!")
 }
 
+func (l *Level) GetRegionsOfType(regionType int) []LevelRegion {
+	var regions []LevelRegion
+	for _, region := range l.Regions {
+		if region.Type == regionType {
+			regions = append(regions, region)
+		}
+	}
+	return regions
+}
+
 func (l *Level) GetRandomSpawnLocation() Location {
 	spawnRegion := l.GetRegionOfType(RTYPE_SPAWN)
 	return spawnRegion.Region.GetRandomLocation()
+}
+
+func (l *Level) GetRegionAtLocation(location Location) LevelRegion {
+	for _, region := range l.Regions {
+		if region.Region.ContainsPosition(location.x, location.y) {
+			return region
+		}
+	}
+	return LevelRegion{Type: RTYPE_NOTHING}
+}
+
+func (l *Level) GetGoalLocation() Location {
+	goalRegion := l.GetRegionOfType(RTYPE_GOAL)
+	return goalRegion.Region.GetRandomLocation()
 }

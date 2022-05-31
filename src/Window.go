@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"gfx"
 	"strconv"
 	"time"
@@ -67,6 +68,7 @@ func loop() {
 		lastFpsTime = 0
 		currentFps = fpsTimer
 		fpsTimer = 0
+		fmt.Println("fps:", currentFps)
 	}
 
 	//Update aus um dual buffering zu ermöglichen

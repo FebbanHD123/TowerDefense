@@ -10,13 +10,13 @@ import (
 //Eff.: Erstellen von Leveln
 
 type LevelEditorScreen struct {
-	level                                                                                      Level
-	makierung                                                                                  Makierung
-	nameTextBox, backgroundImageTextBox                                                        TextBoxWidget
-	createButton, cancelButton, setPathButton, setDefenseButton, setGoalButton, setSpawnButton ButtonWidget
-	previousScreen                                                                             Screen
-	showRegions                                                                                bool
-	toggleShowRegionsButton                                                                    ButtonWidget
+	level                                                                                                         Level
+	makierung                                                                                                     Makierung
+	nameTextBox, backgroundImageTextBox                                                                           TextBoxWidget
+	createButton, cancelButton, setPathButton, setDefenseButton, setGoalButton, setSpawnButton, setWayPointButton ButtonWidget
+	previousScreen                                                                                                Screen
+	showRegions                                                                                                   bool
+	toggleShowRegionsButton                                                                                       ButtonWidget
 }
 
 func CreateNewLevelEditor(previousScreen Screen) LevelEditorScreen {
@@ -60,7 +60,7 @@ func (s *LevelEditorScreen) init() {
 	s.nameTextBox = CreateTextBox(20, 60+FontHeight, 200, 50)
 	s.nameTextBox.SetText(s.level.Name)
 
-	s.backgroundImageTextBox = CreateTextBox(20, 500+FontHeight, 200, 50)
+	s.backgroundImageTextBox = CreateTextBox(20, 580+FontHeight, 200, 50)
 	s.backgroundImageTextBox.SetText(s.level.BackGroundImage.Id.Path)
 
 	//y = 150 - 200
@@ -88,6 +88,14 @@ func (s *LevelEditorScreen) init() {
 		s.level.AddRegion(levelRegion)
 		s.makierung.Reset()
 	})
+
+	//y = 470 - 520
+	s.setWayPointButton = CreateButtonWidget("Way-Point", 20, 470, 200, 50, func() {
+		levelRegion := CreateLevelRegion(RTYPE_WAYPOINT, s.makierung.ToRect())
+		s.level.AddRegion(levelRegion)
+		s.makierung.Reset()
+	})
+
 	s.toggleShowRegionsButton = CreateButtonWidget("Loading", 800+240+20, 50, 200, 50, func() {
 		s.showRegions = !s.showRegions
 	})
@@ -101,6 +109,7 @@ func (s *LevelEditorScreen) update(deltaTime int64) {
 	s.setDefenseButton.setActivated(s.makierung.IsFinished())
 	s.setGoalButton.setActivated(s.makierung.IsFinished())
 	s.setSpawnButton.setActivated(s.makierung.IsFinished())
+	s.setWayPointButton.setActivated(s.makierung.IsFinished())
 
 	if !s.backgroundImageTextBox.isEmpty() {
 		s.level.BackGroundImage = CreateImageName(s.backgroundImageTextBox.text)
@@ -119,7 +128,7 @@ func (s *LevelEditorScreen) render() {
 
 	gfx.Stiftfarbe(255, 255, 255)
 	RenderText("Name:", 20, 60-FontHeight+5)
-	RenderText("Background-Name:", 20, 500-FontHeight+5)
+	RenderText("Background-Name:", 20, 580-FontHeight+5)
 
 	s.nameTextBox.Render()
 	s.createButton.Render(MouseX, MouseY)
@@ -127,6 +136,7 @@ func (s *LevelEditorScreen) render() {
 	s.setDefenseButton.Render(MouseX, MouseY)
 	s.setGoalButton.Render(MouseX, MouseY)
 	s.setSpawnButton.Render(MouseX, MouseY)
+	s.setWayPointButton.Render(MouseX, MouseY)
 	s.cancelButton.Render(MouseX, MouseY)
 	s.backgroundImageTextBox.Render()
 	s.toggleShowRegionsButton.Render(MouseX, MouseY)
@@ -146,6 +156,8 @@ func (s *LevelEditorScreen) render() {
 				gfx.Stiftfarbe(0, 100, 0)
 			case RTYPE_SPAWN:
 				gfx.Stiftfarbe(100, 100, 0)
+			case RTYPE_WAYPOINT:
+				gfx.Stiftfarbe(66, 245, 227)
 			default:
 				gfx.Stiftfarbe(0, 0, 0)
 			}
@@ -173,6 +185,7 @@ func (s *LevelEditorScreen) mousePress(taste uint8, mouseX, mouseY uint16) {
 	s.cancelButton.MousePress(taste, mouseX, mouseY)
 	s.backgroundImageTextBox.mousePress(taste, mouseX, mouseY)
 	s.toggleShowRegionsButton.MousePress(taste, mouseX, mouseY)
+	s.setWayPointButton.MousePress(taste, mouseX, mouseY)
 }
 
 func (s *LevelEditorScreen) mouseRelease(taste uint8, mouseX, mouseY uint16) {

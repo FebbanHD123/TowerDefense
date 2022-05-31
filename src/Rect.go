@@ -26,3 +26,7 @@ func CreateRect(x, y, width, height uint16) Rect {
 		Height: height,
 	}
 }
+
+func (r *Rect) equals(other Rect) bool {
+	return r.X == other.X && r.Y == other.Y && r.Width == other.Width && r.Height == other.Height
+}

@@ -5,10 +5,12 @@ import (
 )
 
 const (
-	RTYPE_PATH    int = 0
-	RTYPE_DEFENSE     = 1
-	RTYPE_GOAL        = 2
-	RTYPE_SPAWN       = 3
+	RTYPE_PATH     int = 0
+	RTYPE_DEFENSE      = 1
+	RTYPE_GOAL         = 2
+	RTYPE_SPAWN        = 3
+	RTYPE_WAYPOINT     = 4
+	RTYPE_NOTHING      = -1
 )
 
 type LevelRegion struct {
@@ -27,4 +29,8 @@ func CreateLevelRegion(regionType int, region Rect) LevelRegion {
 		Region: region,
 		Type:   regionType,
 	}
+}
+
+func (l *LevelRegion) equals(region LevelRegion) bool {
+	return region.Type == l.Type && region.Region == l.Region
 }
