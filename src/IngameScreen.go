@@ -100,11 +100,12 @@ func (s *IngameScreen) mousePress(taste uint8, mouseX, mouseY uint16) {
 	if s.dragAndDrop == nil {
 		for i := range s.towerSlots {
 			slot := s.towerSlots[i]
-			if !slot.IsMouseOver() {
+			if !slot.IsMouseOver() || slot.coasts > s.world.coins {
 				continue
 			}
 			dragAndDrop := CreateDragAndDropTower(slot)
 			s.dragAndDrop = &dragAndDrop
+			break
 		}
 	}
 }

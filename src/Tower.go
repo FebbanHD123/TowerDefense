@@ -12,6 +12,7 @@ func InitTowerTextures() {
 	towerTextures = make(map[int]Image)
 	towerTextures[1] = CreateImageName("entity/tower/1.bmp")
 	towerTextures[2] = CreateImageName("entity/tower/2.bmp")
+	towerTextures[3] = CreateImageName("entity/tower/3.bmp")
 }
 
 type Tower struct {
