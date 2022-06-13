@@ -63,17 +63,17 @@ func GetTowerRange(level int) int {
 	var shootRange int
 	switch level {
 	case 1:
-		shootRange = 150
+		shootRange = 110
 	case 2:
-		shootRange = 200
+		shootRange = 150
 	case 3:
-		shootRange = 225
+		shootRange = 175
 	case 4:
-		shootRange = 250
+		shootRange = 200
 	case 5:
-		shootRange = 275
+		shootRange = 225
 	case 6:
-		shootRange = 300
+		shootRange = 250
 	}
 	return shootRange
 }

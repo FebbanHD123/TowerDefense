@@ -24,7 +24,7 @@ func CreateTowerSlot(x, y uint16, level int) TowerSlot {
 	var coasts int
 	switch level {
 	case 1:
-		coasts = 10
+		coasts = 20
 	case 2:
 		coasts = 35
 	case 3:

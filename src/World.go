@@ -21,10 +21,10 @@ func CreateWorld(level Level) World {
 		enemySpawnTimer: CreateTimer(time.Second),
 		enemies:         make([]Enemy, 0),
 		towers:          make([]Tower, 0),
-		maxHealth:       10000,
-		health:          10000,
+		maxHealth:       10,
+		health:          10,
 		round:           0,
-		coins:           20,
+		coins:           40,
 	}
 }
 
