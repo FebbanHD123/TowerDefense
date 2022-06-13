@@ -32,7 +32,9 @@ func main() {
 
 	LoadAllLevels()
 	InitEnemyTextures()
+	InitTowerTextures()
 	initWindow()
+	StarteMusik()
 	for {
 		loop()
 	}

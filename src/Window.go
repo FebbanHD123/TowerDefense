@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"gfx"
 	"strconv"
 	"time"
@@ -64,11 +63,10 @@ func loop() {
 
 	//wenn das letzte fps update eine Sekunde oder länger her ist,
 	//wird currentFps auf fpsTimer gesetzt und der fpsTimer wieder auf 0 gesetzt.
-	if lastFpsTime >= 1000000000 {
+	if lastFpsTime > 1000000000 {
 		lastFpsTime = 0
 		currentFps = fpsTimer
 		fpsTimer = 0
-		fmt.Println("fps:", currentFps)
 	}
 
 	//Update aus um dual buffering zu ermöglichen
