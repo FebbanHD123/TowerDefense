@@ -5,7 +5,7 @@ import (
 	"gfx"
 )
 
-const enemyWidth = 30
+const enemySize = 30
 
 var enemyLevelTextures map[int]Image
 
@@ -31,7 +31,7 @@ type Enemy struct {
 }
 
 func CreateEnemy(spawnLocation Location, world *World, level int, speed float64) Enemy {
-	maxHealth := 10 + 10*level
+	maxHealth := 10 + 13*level
 	enemy := Enemy{
 		location:   &spawnLocation,
 		level:      level,
@@ -115,7 +115,7 @@ func (e *Enemy) Render() {
 	} else {
 		image = enemyLevelTextures[e.level]
 	}
-	image.Render(e.location.x-enemyWidth/2, e.location.y-enemyWidth/2)
+	image.Render(e.location.x-enemySize/2, e.location.y-enemySize/2)
 	if e.health < e.maxHealth {
 		e.renderHealthBar()
 	}
@@ -123,9 +123,9 @@ func (e *Enemy) Render() {
 
 func (e *Enemy) renderHealthBar() {
 	gfx.Stiftfarbe(100, 100, 100)
-	gfx.Vollrechteck(e.location.x-enemyWidth/2, e.location.y-enemyWidth, enemyWidth, 3)
+	gfx.Vollrechteck(e.location.x-enemySize/2, e.location.y-enemySize, enemySize, 3)
 	gfx.Stiftfarbe(0, 255, 0)
-	gfx.Vollrechteck(e.location.x-enemyWidth/2, e.location.y-enemyWidth, uint16(float64(e.health)/float64(e.maxHealth)*enemyWidth), 3)
+	gfx.Vollrechteck(e.location.x-enemySize/2, e.location.y-enemySize, uint16(float64(e.health)/float64(e.maxHealth)*enemySize), 3)
 }
 
 func (e *Enemy) IsDead() bool {
@@ -138,7 +138,7 @@ func (e *Enemy) SetDead(dead bool) {
 
 func (e *Enemy) IsLocationInHitBox(location Location) bool {
 	distance := location.Distance(*e.location)
-	return distance < enemyWidth
+	return distance < enemySize
 }
 
 func (e *Enemy) DecreaseHealth(amount int) {

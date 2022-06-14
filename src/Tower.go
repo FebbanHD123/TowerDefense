@@ -1,10 +1,11 @@
 package main
 
 import (
+	"gfx"
 	"time"
 )
 
-const towerWidth = 64
+const towerSize = 64
 
 var towerTextures map[int]Image
 
@@ -13,6 +14,7 @@ func InitTowerTextures() {
 	towerTextures[1] = CreateImageName("entity/tower/1.bmp")
 	towerTextures[2] = CreateImageName("entity/tower/2.bmp")
 	towerTextures[3] = CreateImageName("entity/tower/3.bmp")
+	towerTextures[4] = CreateImageName("entity/tower/4.bmp")
 }
 
 type Tower struct {
@@ -60,11 +62,30 @@ func CreateTower(world *World, level int, location Location) Tower {
 	}
 }
 
+func GetTowerCoasts(level int) int {
+	var coasts int
+	switch level {
+	case 1:
+		coasts = 20
+	case 2:
+		coasts = 35
+	case 3:
+		coasts = 75
+	case 4:
+		coasts = 200
+	case 5:
+		coasts = 350
+	case 6:
+		coasts = 500
+	}
+	return coasts
+}
+
 func GetTowerRange(level int) int {
 	var shootRange int
 	switch level {
 	case 1:
-		shootRange = 110
+		shootRange = 115
 	case 2:
 		shootRange = 150
 	case 3:
@@ -77,6 +98,10 @@ func GetTowerRange(level int) int {
 		shootRange = 250
 	}
 	return shootRange
+}
+
+func (t *Tower) GetUpgradeCoasts() int {
+	return GetTowerCoasts(t.level+1) - GetTowerCoasts(t.level)
 }
 
 func (t *Tower) Update(deltaTime int64) {
@@ -116,6 +141,15 @@ func (t *Tower) shoot(goal *Enemy) {
 	t.bullets = append(t.bullets, &bullet)
 }
 
+func (t *Tower) RenderRange() {
+	RenderTowerRange(t.location, t.level)
+}
+
+func RenderTowerRange(location Location, level int) {
+	gfx.Stiftfarbe(180, 180, 180)
+	gfx.Kreis(location.x+towerSize/2, location.y+towerSize/2, uint16(GetTowerRange(level)))
+}
+
 func (t *Tower) getClosestEnemyInRange() (*Enemy, bool) {
 	//Vor.: -
 	//Eff.: Gibt den enemy zurück, der am nächsten an dem Tower ist, solange er
@@ -131,4 +165,8 @@ func (t *Tower) getClosestEnemyInRange() (*Enemy, bool) {
 		}
 	}
 	return closest, closest != nil
+}
+
+func (t *Tower) GetHitBox() Rect {
+	return CreateRect(t.location.x, t.location.y, towerSize, towerSize)
 }

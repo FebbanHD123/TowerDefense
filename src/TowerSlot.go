@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-const towerSlotWidth = enemyWidth + 65
+const towerSlotWidth = enemySize + 65
 
 type TowerSlot struct {
 	location Location
@@ -21,27 +21,12 @@ func CreateTowerSlot(x, y uint16, level int) TowerSlot {
 	} else {
 		image = towerTextures[level]
 	}
-	var coasts int
-	switch level {
-	case 1:
-		coasts = 20
-	case 2:
-		coasts = 35
-	case 3:
-		coasts = 75
-	case 4:
-		coasts = 100
-	case 5:
-		coasts = 250
-	case 6:
-		coasts = 200
-	}
 
 	return TowerSlot{
 		location: CreateLocation(x, y),
 		texture:  image,
 		level:    level,
-		coasts:   coasts,
+		coasts:   GetTowerCoasts(level),
 	}
 }
 
@@ -52,7 +37,7 @@ func (t *TowerSlot) Render() {
 	}
 	gfx.Stiftfarbe(30, 30, 30)
 	gfx.Rechteck(t.location.x, t.location.y, towerSlotWidth, towerSlotWidth)
-	t.texture.Render(t.location.x+(towerSlotWidth-towerWidth)/2, t.location.y+(towerSlotWidth-towerWidth)/4)
+	t.texture.Render(t.location.x+(towerSlotWidth-towerSize)/2, t.location.y+(towerSlotWidth-towerSize)/4)
 	gfx.Stiftfarbe(255, 255, 255)
 	RenderCenteredText("  "+strconv.Itoa(t.coasts)+"€", t.location.x+towerSlotWidth/2, t.location.y+towerSlotWidth-FontHeight-5)
 }

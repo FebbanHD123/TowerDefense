@@ -7,9 +7,11 @@ import (
 )
 
 type IngameScreen struct {
-	world       World
-	towerSlots  []TowerSlot
-	dragAndDrop *DragAndDropTower
+	world                     World
+	towerSlots                []TowerSlot
+	dragAndDrop               *DragAndDropTower
+	slectedTower              *Tower
+	upgradeButton, sellButton ButtonWidget
 }
 
 func CreateIngameScreen(level Level) IngameScreen {
@@ -28,7 +30,16 @@ func CreateIngameScreen(level Level) IngameScreen {
 }
 
 func (s *IngameScreen) init() {
+	s.upgradeButton = CreateButtonWidget("Upgrade", 1050+220/2-150/2, 200, 150, 50, func() {
+		coasts := s.slectedTower.GetUpgradeCoasts()
+		if s.world.coins >= coasts {
+			s.world.coins -= coasts
+		}
+		//TODO: upgrade
+	})
+	s.sellButton = CreateButtonWidget("Sell", 1050+220/2-150/2, 200, 150, 50, func() {
 
+	})
 }
 
 func (s *IngameScreen) update(deltaTime int64) {
@@ -39,6 +50,9 @@ func (s *IngameScreen) update(deltaTime int64) {
 	//wird das nächste level eingeleitet
 	if s.world.enemyCount <= 0 && (s.world.round == 0 || len(s.world.enemies) == 0) {
 		s.world.round++
+		if s.world.round%10 == 0 && s.world.health < s.world.maxHealth {
+			s.world.health++
+		}
 		s.world.enemySpawnTimer = CreateTimer(time.Millisecond*1000 - time.Duration(s.world.round)*25*time.Millisecond)
 		s.world.SetEnemyCount(s.world.round * 3)
 	}
@@ -50,6 +64,9 @@ func (s *IngameScreen) update(deltaTime int64) {
 
 func (s *IngameScreen) render() {
 	s.world.Render(240, 0)
+	if s.slectedTower != nil {
+		s.slectedTower.RenderRange()
+	}
 	s.renderHud()
 }
 
@@ -91,7 +108,11 @@ func (s *IngameScreen) renderHud() {
 	}
 
 	if s.dragAndDrop != nil {
-		s.dragAndDrop.Render(&s.world)
+		s.dragAndDrop.Render(s.world)
+	}
+
+	for i := range s.buttons {
+		s.buttons[i].Render(MouseX, MouseY)
 	}
 
 }
@@ -105,14 +126,22 @@ func (s *IngameScreen) mousePress(taste uint8, mouseX, mouseY uint16) {
 			}
 			dragAndDrop := CreateDragAndDropTower(slot)
 			s.dragAndDrop = &dragAndDrop
-			break
+			return
 		}
 	}
+	for i := range s.world.towers {
+		tower := &s.world.towers[i]
+		if tower.GetHitBox().ContainsPosition(mouseX, mouseY) {
+			s.slectedTower = tower
+			return
+		}
+	}
+	s.slectedTower = nil
 }
 
 func (s *IngameScreen) mouseRelease(taste uint8, mouseX, mouseY uint16) {
 	if s.dragAndDrop != nil {
-		if s.dragAndDrop.CanPlaceTower(&s.world) {
+		if s.dragAndDrop.CanPlaceTower(s.world) {
 			s.world.coins -= s.dragAndDrop.towerSlot.coasts
 			s.world.SpawnTower(s.dragAndDrop.location, s.dragAndDrop.towerSlot.level)
 		}

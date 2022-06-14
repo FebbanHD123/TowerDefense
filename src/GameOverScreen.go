@@ -11,7 +11,8 @@ func (s *GameOverScreen) update(deltaTime int64) {
 }
 
 func (s *GameOverScreen) render() {
-	RenderCenteredText("Du hast velohren", width/2, height/3)
+	RenderCenteredText("Du bist durchgefallen!", width/2, height/3)
+	RenderCenteredText("Die Schule wurde zerstörrt!", width/2, height/3+FontHeight+5)
 }
 
 func (s *GameOverScreen) init() {

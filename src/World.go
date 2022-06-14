@@ -42,7 +42,10 @@ func (w *World) Update(deltaTime int64) {
 		enemy.Update(deltaTime)
 		if w.level.GetRegionOfType(RTYPE_GOAL).Region.ContainsPosition(enemy.location.x, enemy.location.y) {
 			enemiesToRemove = append(enemiesToRemove, i)
-			w.coins--
+			w.coins -= 5
+			if w.coins < 0 {
+				w.coins = 0
+			}
 			w.health--
 		}
 		if enemy.IsDead() {
