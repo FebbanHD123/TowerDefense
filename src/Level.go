@@ -40,7 +40,7 @@ func LoadAllLevels() {
 			panic(err)
 		}
 	}
-	files, err := os.ReadDir(levelsDir)
+	files, err := ioutil.ReadDir(levelsDir)
 	if err != nil {
 		panic(err)
 	}

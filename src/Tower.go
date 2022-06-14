@@ -72,11 +72,11 @@ func GetTowerCoasts(level int) int {
 	case 3:
 		coasts = 75
 	case 4:
-		coasts = 200
+		coasts = 150
 	case 5:
-		coasts = 350
+		coasts = 250
 	case 6:
-		coasts = 500
+		coasts = 400
 	}
 	return coasts
 }

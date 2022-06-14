@@ -28,7 +28,7 @@ func main() {
 		}
 	}
 	fmt.Println("Game-Dir:", GameFilePath)
-	rand.Seed(time.Now().UnixMicro())
+	rand.Seed(time.Now().Unix())
 
 	LoadAllLevels()
 	InitEnemyTextures()

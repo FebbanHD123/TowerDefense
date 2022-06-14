@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-var musikID Identifier = NewIdentifier("music/Inffertig3.wav")
+var musikID Identifier = CreateIdentifier("music/Inffertig3.wav")
 
 const musikLänge = time.Minute * 4
 

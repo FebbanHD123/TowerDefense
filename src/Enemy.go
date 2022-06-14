@@ -31,7 +31,8 @@ type Enemy struct {
 }
 
 func CreateEnemy(spawnLocation Location, world *World, level int, speed float64) Enemy {
-	maxHealth := 10 + 13*level
+	//Eff.: Gibt ein Objekt der Klasse Enemy mit den übergebenen Werten zurück
+	maxHealth := 10 + 10*level
 	enemy := Enemy{
 		location:   &spawnLocation,
 		level:      level,
@@ -47,6 +48,7 @@ func CreateEnemy(spawnLocation Location, world *World, level int, speed float64)
 }
 
 func (e *Enemy) initPath() {
+	//Eff.: Findet den kürzesten Weg zum ziel und Speichert die Weg-Locations ab
 	processedWayPoints := make([]LevelRegion, 0)
 	path := make([]Location, 0)
 	path = append(path, *e.location)
@@ -71,6 +73,7 @@ func (e *Enemy) initPath() {
 }
 
 func (e *Enemy) Update(deltaTime int64) {
+	//Eff.: Bewegt das Objekt über den Weg
 	nodeIndex := int(float64(deltaTime) * e.speed)
 	if nodeIndex >= len(e.path) {
 		nodeIndex = len(e.path) - 1
@@ -83,6 +86,7 @@ func (e *Enemy) Update(deltaTime int64) {
 }
 
 func (e *Enemy) getClosestWayPoint(currentLocation Location, processedWayPoint []LevelRegion) LevelRegion {
+	//Eff.: Gibt den am wenigstens entfernten Waypoint, von der übergebenen Location, des Levels zurück
 	var closest int = -1
 	var closestDistance float64
 	regions := e.world.level.GetRegionsOfType(RTYPE_WAYPOINT)
@@ -100,6 +104,7 @@ func (e *Enemy) getClosestWayPoint(currentLocation Location, processedWayPoint [
 }
 
 func (e *Enemy) IsWayPointProcessed(wayPoint LevelRegion, processedWayPoints []LevelRegion) bool {
+	//Eff.: Gibt zurück, ob ein Waypoint bereits vom Spieler abgelaufen wurde
 	for _, point := range processedWayPoints {
 		if point.equals(wayPoint) {
 			return true
@@ -109,6 +114,7 @@ func (e *Enemy) IsWayPointProcessed(wayPoint LevelRegion, processedWayPoints []L
 }
 
 func (e *Enemy) Render() {
+	//Eff.: Rendert das Enemy
 	var image Image
 	if e.level > len(enemyLevelTextures) {
 		image = enemyLevelTextures[len(enemyLevelTextures)]
@@ -122,6 +128,7 @@ func (e *Enemy) Render() {
 }
 
 func (e *Enemy) renderHealthBar() {
+	//Eff.: Render die Lebensanzeige über dem Enemy
 	gfx.Stiftfarbe(100, 100, 100)
 	gfx.Vollrechteck(e.location.x-enemySize/2, e.location.y-enemySize, enemySize, 3)
 	gfx.Stiftfarbe(0, 255, 0)
@@ -129,19 +136,24 @@ func (e *Enemy) renderHealthBar() {
 }
 
 func (e *Enemy) IsDead() bool {
+	//Eff.: Gibt zurück, ob der Enemy Tod ist
 	return e.dead
 }
 
 func (e *Enemy) SetDead(dead bool) {
+	//Eff.: Setzt ob der Spieler Tod ist
 	e.dead = dead
 }
 
 func (e *Enemy) IsLocationInHitBox(location Location) bool {
+	//Eff.: Gibt zurück, ob eine Location in der Hitbox des Enemys ist.
 	distance := location.Distance(*e.location)
 	return distance < enemySize
 }
 
 func (e *Enemy) DecreaseHealth(amount int) {
+	//Eff.: Entfernt eine übergebene anzahl an Leben
+	//		Wenn das leben unter 0 ist wird es auf 0 gesetzt
 	e.health -= amount
 	if e.health <= 0 {
 		e.dead = true

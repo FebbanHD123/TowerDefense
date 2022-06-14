@@ -18,7 +18,7 @@ const (
 	KEY_ARROR_LEFT    = 276
 )
 
-var fontIdentifier = NewIdentifier("fonts/Skranji-Regular.ttf")
+var fontIdentifier = CreateIdentifier("fonts/Skranji-Regular.ttf")
 var font *truetype.Font
 
 func InitFont() {

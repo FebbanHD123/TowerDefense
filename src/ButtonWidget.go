@@ -26,6 +26,7 @@ func CreateButtonWidget(title string, x, y, width, height uint16, callback func(
 }
 
 func (b *ButtonWidget) Render(mouseX, mouseY uint16) {
+	//Eff.: Rendert den Button
 	b.updateAnimation(currentDeltaTime)
 	if b.activated {
 		gfx.Stiftfarbe(115+uint8(b.animationAlpha), 115+uint8(b.animationAlpha), 115+uint8(b.animationAlpha))
@@ -49,6 +50,7 @@ func (b *ButtonWidget) Render(mouseX, mouseY uint16) {
 }
 
 func (b ButtonWidget) MousePress(taste uint8, mouseX, mouseY uint16) {
+	//Eff.: Wenn gedrückt wird, und die Maus über den Button ist wird das callback ausgeführt
 	if taste == 1 && b.isMouseHover(mouseX, mouseY) && b.activated {
 		b.callback()
 	}
@@ -56,11 +58,13 @@ func (b ButtonWidget) MousePress(taste uint8, mouseX, mouseY uint16) {
 }
 
 func (b *ButtonWidget) isMouseHover(mouseX, mouseY uint16) bool {
+	//Eff.: Gibt zurück, ob die Maus über den Button ist
 	rect := CreateRect(b.x, b.y, b.width, b.height)
 	return rect.ContainsPosition(mouseX, mouseY)
 }
 
 func (b *ButtonWidget) setActivated(activated bool) {
+	//Eff.: Setzt den status des Buttons
 	b.activated = activated
 }
 

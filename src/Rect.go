@@ -13,8 +13,8 @@ func (r Rect) ContainsPosition(x, y uint16) bool {
 }
 
 func (r *Rect) GetRandomLocation() Location {
-	x := r.X + uint16(rand.Intn(int(r.Width)))
-	y := r.Y + uint16(rand.Intn(int(r.Height)))
+	x := r.X + uint16(rand.Intn(int(r.Width+1)))
+	y := r.Y + uint16(rand.Intn(int(r.Height+1)))
 	return CreateLocation(x, y)
 }
 

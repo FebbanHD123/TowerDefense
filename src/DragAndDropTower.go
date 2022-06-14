@@ -10,6 +10,7 @@ type DragAndDropTower struct {
 }
 
 func CreateDragAndDropTower(slot TowerSlot) DragAndDropTower {
+	//Eff.: Gibt ein Objekt der Klasse DragAndDrop mit den übergebenen Werten zurück
 	return DragAndDropTower{
 		location:  CreateLocation(0, 0),
 		towerSlot: slot,
@@ -17,11 +18,13 @@ func CreateDragAndDropTower(slot TowerSlot) DragAndDropTower {
 }
 
 func (t *DragAndDropTower) Update() {
+	//Eff.: Setzt die Position auf die der Maus
 	t.location.x = MouseX - towerSize/2
 	t.location.y = MouseY - towerSize/2
 }
 
 func (t *DragAndDropTower) Render(world World) {
+	//Eff.: Rendert den Tower und seine Range
 	if t.CanPlaceTower(world) {
 		gfx.Stiftfarbe(100, 255, 100)
 	} else {
@@ -33,6 +36,8 @@ func (t *DragAndDropTower) Render(world World) {
 }
 
 func (t *DragAndDropTower) CanPlaceTower(world World) bool {
+	//Eff.: Gibt zurück, ob der Tower an der momentanen Position gesetzt werden kann.
+	//		Also, wenn er in einer Defense-Region ist und keinen anderen Tower trifft
 	if world.coins < t.towerSlot.coasts {
 		return false
 	}

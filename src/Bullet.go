@@ -13,6 +13,8 @@ type Bullet struct {
 }
 
 func CreateBullet(location Location, level int, goalEnemy *Enemy) Bullet {
+	//Vor.: -
+	//Eff.: Erstellt ein Objekt der Klasse Bullet
 	var damage int
 	switch level {
 	default:
@@ -27,6 +29,7 @@ func CreateBullet(location Location, level int, goalEnemy *Enemy) Bullet {
 }
 
 func (b *Bullet) Update(deltaTime int64) {
+	//Eff.: Updated die Position
 	gk := float64(b.location.y) - float64(b.goalEnemy.location.y)
 	ak := float64(b.goalEnemy.location.x) - float64(b.location.x)
 	anstieg := gk / ak
@@ -41,6 +44,7 @@ func (b *Bullet) Update(deltaTime int64) {
 }
 
 func (b *Bullet) Render() {
+	//Rendert die je nach Level die Note
 	gfx.Stiftfarbe(230, 0, 0)
 	RenderCenteredText(b.note, b.location.x, b.location.y-FontHeight/2)
 }

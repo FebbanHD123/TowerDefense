@@ -12,7 +12,7 @@ type Image struct {
 }
 
 func CreateImage(id Identifier) Image {
-	//Vor.: Ein identifier, welcher de Pfad zu einem bpm-image hat, wird übergeben
+	//Vor.: Ein identifier, welcher den Pfad zu einem bpm-image hat, wird übergeben
 	//Eff. Ein image Objekt wird zurückgegeben
 
 	fileInfo, err := os.Stat(id.getPath())
@@ -32,7 +32,9 @@ func CreateImage(id Identifier) Image {
 }
 
 func CreateImageName(name string) Image {
-	return CreateImage(NewIdentifier(name))
+	//Vor.: Ein string, welcher den Pfad zu einem bpm-image hat, wird übergeben
+	//Eff. Ein image Objekt wird zurückgegeben
+	return CreateImage(CreateIdentifier(name))
 }
 
 func (i *Image) Render(x, y uint16) {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -13,7 +14,7 @@ import (
 const sourcePath = "src/"
 
 func main() {
-	files, err := os.ReadDir(sourcePath)
+	files, err := ioutil.ReadDir(sourcePath)
 	if err != nil {
 		panic(err)
 	}

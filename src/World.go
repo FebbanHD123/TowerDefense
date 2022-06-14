@@ -11,7 +11,7 @@ type World struct {
 	towers            []Tower
 	enemyCount        int
 	health, maxHealth int
-	coins             int
+	coins, score      int
 	round             int
 }
 
@@ -24,7 +24,7 @@ func CreateWorld(level Level) World {
 		maxHealth:       10,
 		health:          10,
 		round:           0,
-		coins:           40,
+		coins:           45,
 	}
 }
 
@@ -33,7 +33,7 @@ func (w *World) Update(deltaTime int64) {
 		w.enemyCount--
 		w.enemySpawnTimer.Reset()
 		spawnLocation := w.level.GetRandomSpawnLocation()
-		w.enemies = append(w.enemies, CreateEnemy(spawnLocation, w, int(float64(w.round)/5.0+1), 1+0.2*float64(w.round)))
+		w.enemies = append(w.enemies, CreateEnemy(spawnLocation, w, int(float64(w.round)/5.0+1), 1+0.13*float64(w.round)))
 	}
 
 	enemiesToRemove := make([]int, 0)
@@ -51,6 +51,7 @@ func (w *World) Update(deltaTime int64) {
 		if enemy.IsDead() {
 			enemiesToRemove = append(enemiesToRemove, i)
 			w.coins++
+			w.score++
 		}
 	}
 	for i := range enemiesToRemove {
@@ -94,4 +95,17 @@ func (w *World) GetEnemyCount() int {
 
 func (w *World) SpawnTower(location Location, level int) {
 	w.towers = append(w.towers, CreateTower(w, level, location))
+}
+
+func (w *World) RemoveTower(location Location) {
+	var index = -1
+	for i := range w.towers {
+		if w.towers[i].location == location {
+			index = i
+			break
+		}
+	}
+	if index >= 0 {
+		w.towers = append(w.towers[:index], w.towers[index+1:]...)
+	}
 }
