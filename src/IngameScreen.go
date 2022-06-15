@@ -67,7 +67,7 @@ func (s *IngameScreen) update(deltaTime int64) {
 	}
 
 	if s.slectedTower != nil {
-		s.upgradeButton.setActivated(s.world.coins >= s.slectedTower.GetUpgradeCoasts())
+		s.upgradeButton.setActivated(s.world.coins >= s.slectedTower.GetUpgradeCoasts() && s.slectedTower.level < 6)
 		s.upgradeButton.SetTitle("Upgrade: " + strconv.Itoa(s.slectedTower.GetUpgradeCoasts()) + "€")
 		s.sellButton.setActivated(true)
 		s.sellButton.SetTitle("Sell: " + strconv.Itoa(GetTowerCoasts(s.slectedTower.level)/2) + "€")
