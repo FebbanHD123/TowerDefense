@@ -13,9 +13,10 @@ type World struct {
 	health, maxHealth int
 	coins, score      int
 	round             int
+	userName          string
 }
 
-func CreateWorld(level Level) World {
+func CreateWorld(userName string, level Level) World {
 	return World{
 		level:           level,
 		enemySpawnTimer: CreateTimer(time.Second),
@@ -25,6 +26,7 @@ func CreateWorld(level Level) World {
 		health:          10,
 		round:           0,
 		coins:           45,
+		userName:        userName,
 	}
 }
 
@@ -65,7 +67,7 @@ func (w *World) Update(deltaTime int64) {
 	}
 
 	if w.health <= 0 {
-		screen := CreateGameOverScreen()
+		screen := CreateGameOverScreen(w.userName, w.score)
 		SetScreen(&screen)
 	}
 

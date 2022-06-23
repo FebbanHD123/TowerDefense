@@ -44,16 +44,16 @@ func (s *LevelEditorScreen) init() {
 		s.level.DeleteOldFileIfExists()
 		s.level.Name = s.nameTextBox.text
 		s.level.BackGroundImage = CreateImageName(s.backgroundImageTextBox.text)
-		s.level.Save()
+		s.level.SaveInFile()
 		SetScreen(s.previousScreen)
 	})
-	s.createButton.setActivated(false)
+	s.createButton.SetActivated(false)
 
 	s.cancelButton = CreateButtonWidget("Abbrechen", 20, height-70, 200, 50, func() {
 		SetScreen(s.previousScreen)
 	})
 	if s.previousScreen == nil {
-		s.cancelButton.setActivated(false)
+		s.cancelButton.SetActivated(false)
 	}
 
 	//y = 60-110
@@ -104,12 +104,12 @@ func (s *LevelEditorScreen) init() {
 func (s *LevelEditorScreen) update(deltaTime int64) {
 	s.nameTextBox.Update()
 	s.backgroundImageTextBox.Update()
-	s.createButton.setActivated(s.IsComplete())
-	s.setPathButton.setActivated(s.makierung.IsFinished())
-	s.setDefenseButton.setActivated(s.makierung.IsFinished())
-	s.setGoalButton.setActivated(s.makierung.IsFinished())
-	s.setSpawnButton.setActivated(s.makierung.IsFinished())
-	s.setWayPointButton.setActivated(s.makierung.IsFinished())
+	s.createButton.SetActivated(s.IsComplete())
+	s.setPathButton.SetActivated(s.makierung.IsFinished())
+	s.setDefenseButton.SetActivated(s.makierung.IsFinished())
+	s.setGoalButton.SetActivated(s.makierung.IsFinished())
+	s.setSpawnButton.SetActivated(s.makierung.IsFinished())
+	s.setWayPointButton.SetActivated(s.makierung.IsFinished())
 
 	if !s.backgroundImageTextBox.isEmpty() {
 		s.level.BackGroundImage = CreateImageName(s.backgroundImageTextBox.text)
@@ -202,6 +202,7 @@ func (s *LevelEditorScreen) keyPressed(taste uint16, gedrueck bool, tiefe uint16
 }
 
 func (s *LevelEditorScreen) IsComplete() bool {
+	//Eff.: Gibt zurück, ob das Level gespeichert werden kann
 	if s.nameTextBox.isEmpty() || s.backgroundImageTextBox.isEmpty() || !s.level.HasAllRequiredRegions() {
 		return false
 	}

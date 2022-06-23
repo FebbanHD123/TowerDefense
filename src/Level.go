@@ -75,7 +75,7 @@ func LoadLevel(fileName string) (Level, error) {
 	return level, nil
 }
 
-func (l Level) Save() {
+func (l Level) SaveInFile() {
 	//Vor.: -
 	//Eff.: Speichert das Level in form von json in einem file
 
@@ -145,6 +145,7 @@ func (l *Level) HasAllRequiredRegions() bool {
 }
 
 func (l *Level) GetRegionOfType(regionType int) LevelRegion {
+	//Eff.: Gibt ein slicve mit allen regionen von dem übergebenen typen zurück
 	for _, region := range l.Regions {
 		if region.Type == regionType {
 			return region
@@ -154,6 +155,7 @@ func (l *Level) GetRegionOfType(regionType int) LevelRegion {
 }
 
 func (l *Level) GetRegionsOfType(regionType int) []LevelRegion {
+	//Eff.: Gibt eine Region des übergebenen typen zurück
 	var regions []LevelRegion
 	for _, region := range l.Regions {
 		if region.Type == regionType {

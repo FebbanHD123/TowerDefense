@@ -63,7 +63,7 @@ func (b *ButtonWidget) isMouseHover(mouseX, mouseY uint16) bool {
 	return rect.ContainsPosition(mouseX, mouseY)
 }
 
-func (b *ButtonWidget) setActivated(activated bool) {
+func (b *ButtonWidget) SetActivated(activated bool) {
 	//Eff.: Setzt den status des Buttons
 	b.activated = activated
 }

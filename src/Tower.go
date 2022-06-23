@@ -15,6 +15,8 @@ func InitTowerTextures() {
 	towerTextures[2] = CreateImageName("entity/tower/2.bmp")
 	towerTextures[3] = CreateImageName("entity/tower/3.bmp")
 	towerTextures[4] = CreateImageName("entity/tower/4.bmp")
+	towerTextures[5] = CreateImageName("entity/tower/5.bmp")
+	towerTextures[6] = CreateImageName("entity/tower/6.bmp")
 }
 
 type Tower struct {

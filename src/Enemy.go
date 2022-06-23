@@ -14,20 +14,21 @@ func InitEnemyTextures() {
 	enemyLevelTextures[1] = CreateImageName("entity/enemy/1.bmp")
 	enemyLevelTextures[2] = CreateImageName("entity/enemy/2.bmp")
 	enemyLevelTextures[3] = CreateImageName("entity/enemy/3.bmp")
+	enemyLevelTextures[4] = CreateImageName("entity/enemy/4.bmp")
+	enemyLevelTextures[5] = CreateImageName("entity/enemy/5.bmp")
+	enemyLevelTextures[6] = CreateImageName("entity/enemy/6.bmp")
 }
 
 type Enemy struct {
-	currentWaypoint    int
-	ProcessedWayPoints []int
-	location           *Location
-	level              int
-	pathfinder         Pathfinder
-	world              *World
-	path               []Location
-	dead               bool
-	health             int
-	maxHealth          int
-	speed              float64
+	location   *Location
+	level      int
+	pathfinder Pathfinder
+	world      *World
+	path       []Location
+	dead       bool
+	health     int
+	maxHealth  int
+	speed      float64
 }
 
 func CreateEnemy(spawnLocation Location, world *World, level int, speed float64) Enemy {

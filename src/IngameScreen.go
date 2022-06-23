@@ -10,14 +10,14 @@ type IngameScreen struct {
 	world                     World
 	towerSlots                []TowerSlot
 	dragAndDrop               *DragAndDropTower
-	slectedTower              *Tower
+	selectedTower             *Tower
 	upgradeButton, sellButton ButtonWidget
 }
 
-func CreateIngameScreen(level Level) IngameScreen {
+func CreateIngameScreen(userName string, level Level) IngameScreen {
 	//Eff.: Gibt ein Objekt der Klasse IngameScreen zurück
 	screen := IngameScreen{
-		world: CreateWorld(level),
+		world: CreateWorld(userName, level),
 		towerSlots: []TowerSlot{
 			CreateTowerSlot(240/2-towerSlotWidth/2, 30+(20+towerSlotWidth)*0, 1),
 			CreateTowerSlot(240/2-towerSlotWidth/2, 30+(20+towerSlotWidth)*1, 2),
@@ -32,18 +32,18 @@ func CreateIngameScreen(level Level) IngameScreen {
 
 func (s *IngameScreen) init() {
 	s.upgradeButton = CreateButtonWidget("Upgrade", 1050+220/2-150/2, 200, 150, 50, func() {
-		coasts := s.slectedTower.GetUpgradeCoasts()
+		coasts := s.selectedTower.GetUpgradeCoasts()
 		if s.world.coins >= coasts {
 			s.world.coins -= coasts
 		}
-		s.world.SpawnTower(s.slectedTower.location, s.slectedTower.level+1)
-		s.world.RemoveTower(s.slectedTower.location)
-		s.slectedTower = nil
+		s.world.SpawnTower(s.selectedTower.location, s.selectedTower.level+1)
+		s.world.RemoveTower(s.selectedTower.location)
+		s.selectedTower = nil
 	})
 	s.sellButton = CreateButtonWidget("Sell", 1050+220/2-150/2, 200+70, 150, 50, func() {
-		coins := GetTowerCoasts(s.slectedTower.level) / 2
+		coins := GetTowerCoasts(s.selectedTower.level) / 2
 		s.world.coins += coins
-		s.world.RemoveTower(s.slectedTower.location)
+		s.world.RemoveTower(s.selectedTower.location)
 	})
 }
 
@@ -66,23 +66,23 @@ func (s *IngameScreen) update(deltaTime int64) {
 		s.dragAndDrop.Update()
 	}
 
-	if s.slectedTower != nil {
-		s.upgradeButton.setActivated(s.world.coins >= s.slectedTower.GetUpgradeCoasts() && s.slectedTower.level < 6)
-		s.upgradeButton.SetTitle("Upgrade: " + strconv.Itoa(s.slectedTower.GetUpgradeCoasts()) + "€")
-		s.sellButton.setActivated(true)
-		s.sellButton.SetTitle("Sell: " + strconv.Itoa(GetTowerCoasts(s.slectedTower.level)/2) + "€")
+	if s.selectedTower != nil {
+		s.upgradeButton.SetActivated(s.world.coins >= s.selectedTower.GetUpgradeCoasts() && s.selectedTower.level < 6)
+		s.upgradeButton.SetTitle("Upgrade: " + strconv.Itoa(s.selectedTower.GetUpgradeCoasts()) + "€")
+		s.sellButton.SetActivated(true)
+		s.sellButton.SetTitle("Sell: " + strconv.Itoa(GetTowerCoasts(s.selectedTower.level)/2) + "€")
 	} else {
-		s.upgradeButton.setActivated(false)
+		s.upgradeButton.SetActivated(false)
 		s.upgradeButton.SetTitle("Upgrade")
-		s.sellButton.setActivated(false)
+		s.sellButton.SetActivated(false)
 		s.sellButton.SetTitle("Sell")
 	}
 }
 
 func (s *IngameScreen) render() {
 	s.world.Render(240, 0)
-	if s.slectedTower != nil {
-		s.slectedTower.RenderRange()
+	if s.selectedTower != nil {
+		s.selectedTower.RenderRange()
 	}
 	s.renderHud()
 }
@@ -153,11 +153,11 @@ func (s *IngameScreen) mousePress(taste uint8, mouseX, mouseY uint16) {
 	for i := range s.world.towers {
 		tower := &s.world.towers[i]
 		if tower.GetHitBox().ContainsPosition(mouseX, mouseY) {
-			s.slectedTower = tower
+			s.selectedTower = tower
 			return
 		}
 	}
-	s.slectedTower = nil
+	s.selectedTower = nil
 }
 
 func (s *IngameScreen) mouseRelease(taste uint8, mouseX, mouseY uint16) {

@@ -20,7 +20,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	GameFilePath = wd + "/.towerdefense"
+	GameFilePath = wd + "/towerdefense"
 	if !FileExistsSafe(GameFilePath) {
 		err = os.Mkdir(GameFilePath, os.ModePerm)
 		if err != nil {
